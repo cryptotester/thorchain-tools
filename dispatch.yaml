@@ -1,0 +1,6 @@
+dispatch:
+  - url: "cryptotester.info/*"
+    service: default
+
+  - url: "thorchain.cryptotester.info/*"
+    service: thorchain

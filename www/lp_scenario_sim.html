@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thorswap LP Scenario Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>LP Scenario Simulator</h1>
+
+        <div class="row g-1">
+            <div class="col-3">
+                <label for="assetName" class="form-label">Asset name (e.g. BTC)</label>
+                <input id="assetName" type="text" v-model="assetName" placeholder="asset" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="initRuneAmount" class="form-label">Rune amount entered</label>
+                <input id="initRuneAmount" type="number" v-model.number="initRuneAmount" placeholder="rune amt entered" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="runePriceAtEnter" class="form-label">Rune price at enter</label>
+                <input id="runePriceAtEnter" type="number" v-model.number="runePriceAtEnter" placeholder="rune price at enter" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="assetPriceAtEnter" class="form-label">Asset price at enter</label>
+                <input id="assetPriceAtEnter" type="number" v-model.number="assetPriceAtEnter" placeholder="asset price at enter" class="form-control">
+            </div>
+
+            <div class="col-3">
+                <label for="runePriceNow" class="form-label">Rune price predicted</label>
+                <input id="runePriceNow" type="number" v-model.number="runePriceNow" placeholder="rune price predict" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="assetPriceNow" class="form-label">Asset price predicted</label>
+                <input id="assetPriceNow" type="number" v-model.number="assetPriceNow" placeholder="asset price predict" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="timeInPool" class="form-label">Timespan in months</label>
+                <input id="timeInPool" type="number" v-model.number="timeInPool" placeholder="timespan in months" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="desiredAPY" class="form-label">APY</label>
+                <input id="desiredAPY" type="number" v-model.number="desiredAPY" placeholder="APY" class="form-control">
+            </div>
+        </div>
+<br>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <td>Initial investment value</td>
+                <td>{{initInvestmentValue.toFixed(2)}} USD</td>
+                <td>Current pool value</td>
+                <td>{{LPValue.toFixed(2)}} USD</td>
+            </tr>
+            <tr>
+                <td><span v-if="overallGain > 0">Gain</span><span v-else>Loss</span> in USD</td>
+                <td>{{overallGain.toFixed(2)}} USD</td>
+                <td><span v-if="overallGain > 0">Gain</span><span v-else>Loss</span> %</td>
+                <td>{{overallGainPercent.toFixed(2)}} %</td>
+            </tr>
+            <tr>
+                <td>Rune movement</td>
+                <td>{{runeMovement}}</td>
+                <td>{{assetName}} movement</td>
+                <td>{{assetMovement}}</td>
+            </tr>
+            <tr>
+                <td>Rune amount in pool</td>
+                <td>{{runeAmountNow.toFixed(2)}}</td>
+                <td>{{assetName}} amount in pool</td>
+                <td>{{assetAmountNow.toFixed(2)}}</td>
+            </tr>
+            <tr>
+                <td>Total Gain/Loss</td>
+                <td>{{(runeAmountNow - initRuneAmount).toFixed(2)}} Rune</td>
+                <td></td>
+                <td>{{(assetAmountNow - initAssetAmount).toFixed(2)}} {{assetName}}</td>
+            </tr>
+            <tr>
+                <td>Fee earn</td>
+                <td>{{feeEarnRune.toFixed(2)}} Rune</td>
+                <td></td>
+                <td>{{feeEarnAsset.toFixed(2)}} {{assetName}}</td>
+            </tr>
+            <tr>
+                <td colspan="4"><h2>LP Scenarios</h2></td>
+            </tr>
+            <tr>
+                <td colspan="2">Hodling {{initRuneAmount.toFixed(2)}} Rune & {{initAssetAmount.toFixed(2)}} {{assetName}} value</td>
+                <td colspan="2">{{hodlValue.toFixed(2)}} USD</td>
+            </tr>
+            <tr>
+                <td colspan="2">If you entered the pool <strong>symmetrically</strong>. LP vs HOLD value</td>
+                <td colspan="2">{{symLPvsHOLD.toFixed(2)}} USD</td>
+            </tr>
+            <tr>
+                <td colspan="2">If you entered the pool asymmetrically with <strong>Rune</strong>. LP vs HOLD value</td>
+                <td colspan="2">{{asymRuneLPvsHOLD.toFixed(2)}} USD</td>
+            </tr>
+            <tr>
+                <td colspan="2">If you entered the pool asymmetrically with <strong>{{assetName}}</strong>. LP vs HOLD value</td>
+                <td colspan="2">{{asymAssetLPvsHOLD.toFixed(2)}} USD</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div v-if="symLPvsHOLD >= 0">No ILP needed ! :) you made {{symLPvsHOLD.toFixed(2)}} USD!</div>
+                    <div v-else>ILP would cover {{(ILP*100).toFixed(2)}} % of your LP vs hold losses: {{(-symLPvsHOLD*ILP).toFixed(2)}} USD or {{((-symLPvsHOLD/runePriceNow)*ILP).toFixed(2)}} Rune</div>
+                </td>
+            </tr>
+        </table>
+    </div><!--end app-->
+    <footer>
+        <div class="text-center p-4">
+            Based on lp_scenario_sim.py* by pietrekt on <a href="https://liquidityprovider.university/" target="_blank">LP University</a> Discord server<br>
+            *Original script available in the #general channel (pinned message)
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    <script src="lp_scenario_sim.js"></script>
+</body>
+</html>
