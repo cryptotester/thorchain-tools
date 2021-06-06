@@ -17,6 +17,10 @@
                 <input id="assetName" type="text" v-model="assetName" placeholder="asset" class="form-control">
             </div>
             <div class="col-3">
+                <label for="initAssetAmount" class="form-label">Asset amount entered: </label>
+                <input id="initAssetAmount" type="number" v-model.number="initAssetAmount" placeholder="Asset amt entered" class="form-control">
+            </div>
+            <div class="col-3">
                 <label for="initRuneAmount" class="form-label">Rune amount entered</label>
                 <input id="initRuneAmount" type="number" v-model.number="initRuneAmount" placeholder="rune amt entered" class="form-control">
             </div>
@@ -89,7 +93,7 @@
             </tr>
             <tr>
                 <td colspan="2">Hodling {{initRuneAmount.toFixed(2)}} Rune & {{initAssetAmount.toFixed(2)}} {{assetName}} value</td>
-                <td colspan="2">{{hodlValue.toFixed(2)}} USD</td>
+                <td colspan="2">{{symHold.toFixed(2)}} USD</td>
             </tr>
             <tr>
                 <td colspan="2">If you entered the pool <strong>symmetrically</strong>. LP vs HOLD value</td>
