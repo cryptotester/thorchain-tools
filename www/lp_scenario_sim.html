@@ -54,63 +54,63 @@
         <table class="table table-striped table-bordered">
             <tr>
                 <td>Initial investment value</td>
-                <td>{{initInvestmentValue.toFixed(2)}} USD</td>
+                <td>{{getRounded(initInvestmentValue, 2, 'USD')}}</td>
                 <td>Current pool value</td>
-                <td>{{LPValue.toFixed(2)}} USD</td>
+                <td>{{getRounded(LPValue, 2, 'USD')}}</td>
             </tr>
             <tr>
                 <td><span v-if="overallGain > 0">Gain</span><span v-else>Loss</span> in USD</td>
-                <td>{{overallGain.toFixed(2)}} USD</td>
+                <td>{{getRounded(overallGain, 2, 'USD')}}</td>
                 <td><span v-if="overallGain > 0">Gain</span><span v-else>Loss</span> %</td>
-                <td>{{overallGainPercent.toFixed(2)}} %</td>
+                <td>{{getRounded(overallGainPercent, 2, '%')}}</td>
             </tr>
             <tr>
                 <td>Rune movement</td>
-                <td>{{runeMovement}}</td>
+                <td>{{getRounded(runeMovement, 1)}}</td>
                 <td>{{assetName}} movement</td>
-                <td>{{assetMovement}}</td>
+                <td>{{getRounded(assetMovement, 1)}}</td>
             </tr>
             <tr>
                 <td>Rune amount in pool</td>
-                <td>{{runeAmountNow.toFixed(2)}}</td>
+                <td>{{getRounded(runeAmountNow, 2)}}</td>
                 <td>{{assetName}} amount in pool</td>
-                <td>{{assetAmountNow.toFixed(2)}}</td>
+                <td>{{getRounded(assetAmountNow, 2)}}</td>
             </tr>
             <tr>
                 <td>Total Gain/Loss</td>
-                <td>{{(runeAmountNow - initRuneAmount).toFixed(2)}} Rune</td>
+                <td>{{getRounded((runeAmountNow - initRuneAmount), 2, 'Rune')}}</td>
                 <td></td>
-                <td>{{(assetAmountNow - initAssetAmount).toFixed(2)}} {{assetName}}</td>
+                <td>{{getRounded((assetAmountNow - initAssetAmount), 2, assetName)}}</td>
             </tr>
             <tr>
                 <td>Fee earn</td>
-                <td>{{feeEarnRune.toFixed(2)}} Rune</td>
+                <td>{{getRounded(feeEarnRune, 2, 'Rune')}}</td>
                 <td></td>
-                <td>{{feeEarnAsset.toFixed(2)}} {{assetName}}</td>
+                <td>{{getRounded(feeEarnAsset, 2, assetName)}}</td>
             </tr>
             <tr>
                 <td colspan="4"><h2>LP Scenarios</h2></td>
             </tr>
             <tr>
-                <td colspan="2">Hodling {{initRuneAmount.toFixed(2)}} Rune & {{initAssetAmount.toFixed(2)}} {{assetName}} value</td>
-                <td colspan="2">{{symHold.toFixed(2)}} USD</td>
+                <td colspan="2">Hodling {{getRounded(initRuneAmount, 2, 'Rune')}} & {{getRounded(initAssetAmount, 2, assetName)}} value</td>
+                <td colspan="2">{{getRounded(symHold, 2, 'USD')}}</td>
             </tr>
             <tr>
                 <td colspan="2">If you entered the pool <strong>symmetrically</strong>. LP vs HOLD value</td>
-                <td colspan="2">{{symLPvsHOLD.toFixed(2)}} USD</td>
+                <td colspan="2">{{getRounded(symLPvsHOLD, 2, 'USD')}}</td>
             </tr>
             <tr>
                 <td colspan="2">If you entered the pool asymmetrically with <strong>Rune</strong>. LP vs HOLD value</td>
-                <td colspan="2">{{asymRuneLPvsHOLD.toFixed(2)}} USD</td>
+                <td colspan="2">{{getRounded(asymRuneLPvsHOLD, 2, 'USD')}}</td>
             </tr>
             <tr>
                 <td colspan="2">If you entered the pool asymmetrically with <strong>{{assetName}}</strong>. LP vs HOLD value</td>
-                <td colspan="2">{{asymAssetLPvsHOLD.toFixed(2)}} USD</td>
+                <td colspan="2">{{getRounded(asymAssetLPvsHOLD, 2, 'USD')}}</td>
             </tr>
             <tr>
                 <td colspan="4">
                     <div v-if="symLPvsHOLD >= 0">No ILP needed ! :) you made {{symLPvsHOLD.toFixed(2)}} USD!</div>
-                    <div v-else>ILP would cover {{(ILP*100).toFixed(2)}} % of your LP vs hold losses: {{(-symLPvsHOLD*ILP).toFixed(2)}} USD or {{((-symLPvsHOLD/runePriceNow)*ILP).toFixed(2)}} Rune</div>
+                    <div v-else>ILP would cover {{getRounded((ILP*100), 2, '%')}} of your LP vs hold losses: {{getRounded((-symLPvsHOLD*ILP), 2, 'USD')}} or {{getRounded(-symLPvsHOLD/runePriceNow*ILP, 2, 'Rune')}}</div>
                 </td>
             </tr>
         </table>

@@ -5,15 +5,19 @@ const app = new Vue({
     el: '#app',
     data: {
         assetName: '',
-        initRuneAmount: '',
-        runePriceAtEnter: '',
-        assetPriceAtEnter: '',
-        runePriceNow: '',
-        assetPriceNow: '',
-        timeInPool: '',
-        desiredAPY: '',
+        initRuneAmount: 0,
+        runePriceAtEnter: 0,
+        assetPriceAtEnter: 0,
+        runePriceNow: 0,
+        assetPriceNow: 0,
+        timeInPool: 0,
+        desiredAPY: 0,
     },
     methods: {
+        getRounded(number, rounding, suffix) {
+            let suffixText = suffix !== undefined ? ` ${suffix}` : ''
+            return !isNaN(number) ? `${number.toFixed(rounding)}${suffixText}` : ''
+        },
         updateUrl() {
             router.push({
                 path: 'lp',
