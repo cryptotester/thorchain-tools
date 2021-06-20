@@ -65,21 +65,23 @@ const app = new Vue({
         currentAssetPriceInRune() {
             return this.assetPriceNow / this.runePriceNow
         },
-        assetAmountNow() {
-            // TODO: add feeEarnAsset
+        assetAmountNowWithoutFees() {
             return Math.sqrt(this.initRuneAmount * this.initAssetAmount / this.currentAssetPriceInRune)
-              //+ this.feeEarnAsset
+        },
+        runeAmountNowWithoutFees() {
+            return this.currentAssetPriceInRune * this.assetAmountNowWithoutFees
+        },
+        assetAmountNow() {
+            return this.assetAmountNowWithoutFees + this.feeEarnAsset
         },
         runeAmountNow() {
-            // TODO: add feeEarnRune
-            return this.currentAssetPriceInRune * this.assetAmountNow
-              //+ this.feeEarnRune
+            return this.runeAmountNowWithoutFees + this.feeEarnRune
         },
         APY() {
             return this.desiredAPY / 200
         },
         totalPoolBalance() {
-            return (this.initRuneAmount + this.runeAmountNow) / 2 * this.runePriceNow + (this.initAssetAmount + this.assetAmountNow) / 2 * this.assetPriceNow  // in USD
+            return (this.initRuneAmount + this.runeAmountNowWithoutFees) / 2 * this.runePriceNow + (this.initAssetAmount + this.assetAmountNowWithoutFees) / 2 * this.assetPriceNow  // in USD
         },
         totalFeeEarn() {
             return this.totalPoolBalance * (Math.pow(Math.pow((1 + this.APY), 1/12), this.timeInPool) - 1)
