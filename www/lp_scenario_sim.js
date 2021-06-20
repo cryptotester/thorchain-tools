@@ -22,14 +22,14 @@ const app = new Vue({
             router.push({
                 path: 'lp',
                 query: {
-                    assetName: this.assetName,
-                    initRuneAmount: this.initRuneAmount,
-                    runePriceAtEnter: this.runePriceAtEnter,
-                    assetPriceAtEnter: this.assetPriceAtEnter,
-                    runePriceNow: this.runePriceNow,
-                    assetPriceNow: this.assetPriceNow,
-                    timeInPool: this.timeInPool,
-                    desiredAPY: this.desiredAPY
+                    assetName: this.assetName || undefined,
+                    initRuneAmount: this.initRuneAmount || undefined,
+                    runePriceAtEnter: this.runePriceAtEnter || undefined,
+                    assetPriceAtEnter: this.assetPriceAtEnter || undefined,
+                    runePriceNow: this.runePriceNow || undefined,
+                    assetPriceNow: this.assetPriceNow || undefined,
+                    timeInPool: this.timeInPool || undefined,
+                    desiredAPY: this.desiredAPY || undefined
                 }
             })
         },
@@ -121,6 +121,9 @@ const app = new Vue({
         }
     },
     watch: {
+        assetName() {
+            this.updateUrl()
+        },
         initRuneAmount() {
             this.updateUrl()
         },
