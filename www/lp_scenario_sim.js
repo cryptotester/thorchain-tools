@@ -87,10 +87,10 @@ const app = new Vue({
             return this.totalPoolBalance * (Math.pow(Math.pow((1 + this.APY), 1/12), this.timeInPool) - 1)
         },
         feeEarnRune() {
-            return this.totalFeeEarn / (2 * this.runePriceNow)
+            return this.totalFeeEarn / this.runePriceNow
         },
         feeEarnAsset() {
-            return this.totalFeeEarn / (2 * this.assetPriceNow)
+            return this.totalFeeEarn / this.assetPriceNow
         },
         LPValue() {
             return this.runeAmountNow * this.runePriceNow + this.assetAmountNow * this.assetPriceNow
