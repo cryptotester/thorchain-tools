@@ -17,10 +17,6 @@
                 <input id="assetName" type="text" v-model="assetName" placeholder="asset" class="form-control">
             </div>
             <div class="col-3">
-                <label for="initAssetAmount" class="form-label">Asset amount entered: </label>
-                <input id="initAssetAmount" type="number" v-model.number="initAssetAmount" placeholder="Asset amt entered" class="form-control">
-            </div>
-            <div class="col-3">
                 <label for="initRuneAmount" class="form-label">Rune amount entered</label>
                 <input id="initRuneAmount" type="number" v-model.number="initRuneAmount" placeholder="rune amt entered" class="form-control">
             </div>
@@ -48,6 +44,10 @@
             <div class="col-3">
                 <label for="desiredAPY" class="form-label">APY</label>
                 <input id="desiredAPY" type="number" v-model.number="desiredAPY" placeholder="APY" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="initAssetAmount" class="form-label">Asset amount entered: </label>
+                <input id="initAssetAmount" type="number" v-model.number="initAssetAmount" placeholder="Asset amt entered" class="form-control" readonly>
             </div>
         </div>
 <br>
@@ -117,6 +117,7 @@
     </div><!--end app-->
     <footer>
         <div class="text-center p-4">
+            This script is open source published on <a href="https://github.com/cryptotester/thorchain-tools">github.com/cryptotester/thorchain-tools</a><br>
             Based on lp_scenario_sim.py* by pietrekt on <a href="https://liquidityprovider.university/" target="_blank">LP University</a> Discord server<br>
             *Original script available in the #general channel (pinned message)
         </div>
