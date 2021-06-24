@@ -11,6 +11,11 @@
     <div id="app" class="container">
         <h1>LP Scenario Simulator</h1>
 
+        <p>How to use this tool: enter the amount of Rune as you'd enter a pool in THORSwap.
+            If you'd like to enter asimmetrically with an asset, you must calcualate how much 50% of the asset would be in Rune.
+            Note: this will be improved in the future. For now use it like this ;)
+        </p>
+
         <div class="row g-1">
             <div class="col-3">
                 <label for="assetName" class="form-label">Asset name (e.g. BTC)</label>
@@ -25,7 +30,7 @@
                 <input id="runePriceAtEnter" type="number" v-model.number="runePriceAtEnter" placeholder="rune price at enter" class="form-control">
             </div>
             <div class="col-3">
-                <label for="assetPriceAtEnter" class="form-label">Asset price at enter</label>
+                <label for="assetPriceAtEnter" class="form-label">{{assetName ? assetName : 'Asset'}} price at enter</label>
                 <input id="assetPriceAtEnter" type="number" v-model.number="assetPriceAtEnter" placeholder="asset price at enter" class="form-control">
             </div>
 
@@ -34,7 +39,7 @@
                 <input id="runePriceNow" type="number" v-model.number="runePriceNow" placeholder="rune price predict" class="form-control">
             </div>
             <div class="col-3">
-                <label for="assetPriceNow" class="form-label">Asset price predicted</label>
+                <label for="assetPriceNow" class="form-label">{{assetName ? assetName : 'Asset'}} price predicted</label>
                 <input id="assetPriceNow" type="number" v-model.number="assetPriceNow" placeholder="asset price predict" class="form-control">
             </div>
             <div class="col-3">
@@ -46,8 +51,16 @@
                 <input id="desiredAPY" type="number" v-model.number="desiredAPY" placeholder="APY" class="form-control">
             </div>
             <div class="col-3">
-                <label for="initAssetAmount" class="form-label">Asset amount entered: </label>
-                <input id="initAssetAmount" type="number" v-model.number="initAssetAmount" placeholder="Asset amt entered" class="form-control" readonly>
+                <label for="initAssetAmount" class="form-label">{{assetName ? assetName : 'Asset'}} amount entered</label>
+                <input id="initAssetAmount" type="text" v-model.number="getRounded(initAssetAmount, 2, assetName)" placeholder="Asset amt entered" class="form-control" readonly>
+            </div>
+            <div class="col-3">
+                <label for="initRuneAmountAsym" class="form-label">Rune amount entered asymmetrically</label>
+                <input id="initRuneAmountAsym" type="text" v-model.number="getRounded(initRuneAmountAsym, 2, 'Rune')" placeholder="Rune amt asym" class="form-control" readonly>
+            </div>
+            <div class="col-3">
+                <label for="initAssetAmountAsym" class="form-label">{{assetName ? assetName : 'Asset'}} amount entered asymmetrically</label>
+                <input id="initAssetAmountAsym" type="text" v-model.number="getRounded(initAssetAmountAsym, 2, assetName)" placeholder="Asset amt asym" class="form-control" readonly>
             </div>
         </div>
 <br>
@@ -72,9 +85,9 @@
             </tr>
             <tr>
                 <td>Rune amount in pool</td>
-                <td>{{getRounded(runeAmountNow, 2)}}</td>
+                <td>{{getRounded(runeAmountNow, 2, 'Rune')}}</td>
                 <td>{{assetName}} amount in pool</td>
-                <td>{{getRounded(assetAmountNow, 2)}}</td>
+                <td>{{getRounded(assetAmountNow, 2, assetName)}}</td>
             </tr>
             <tr>
                 <td>Total Gain/Loss</td>
@@ -92,20 +105,40 @@
                 <td colspan="4"><h2>LP Scenarios</h2></td>
             </tr>
             <tr>
-                <td colspan="2">Hodling {{getRounded(initRuneAmount, 2, 'Rune')}} & {{getRounded(initAssetAmount, 2, assetName)}} value</td>
-                <td colspan="2">{{getRounded(symHold, 2, 'USD')}}</td>
+                <td colspan="4">If you entered the pool <strong>symmetrically</strong></td>
             </tr>
             <tr>
-                <td colspan="2">If you entered the pool <strong>symmetrically</strong>. LP vs HOLD value</td>
-                <td colspan="2">{{getRounded(symLPvsHOLD, 2, 'USD')}}</td>
+                <td>LP vs HOLD value</td>
+                <td>{{getRounded(symLPvsHOLD, 2, 'USD')}}</td>
+                <td>Redeemable</td>
+                <td>{{getRounded(runeAmountNow, 2, 'Rune')}} + {{getRounded(assetAmountNow, 2, assetName)}}</td>
             </tr>
             <tr>
-                <td colspan="2">If you entered the pool asymmetrically with <strong>Rune</strong>. LP vs HOLD value</td>
-                <td colspan="2">{{getRounded(asymRuneLPvsHOLD, 2, 'USD')}}</td>
+                <td colspan="4">If you entered the pool asymmetrically with <strong>Rune</strong></td>
             </tr>
             <tr>
-                <td colspan="2">If you entered the pool asymmetrically with <strong>{{assetName}}</strong>. LP vs HOLD value</td>
-                <td colspan="2">{{getRounded(asymAssetLPvsHOLD, 2, 'USD')}}</td>
+                <td>LP vs HOLD value</td>
+                <td>{{getRounded(asymRuneLPvsHOLD, 2, 'USD')}}</td>
+                <td>Rune redeemable</td>
+                <td>{{getRounded(runeAmountNow * 2, 2, 'Rune')}}</td>
+            </tr>
+            <tr>
+                <td colspan="4">If you entered the pool asymmetrically with <strong>{{assetName}}</strong></td>
+            </tr>
+            <tr>
+                <td>LP vs HOLD value</td>
+                <td>{{getRounded(asymAssetLPvsHOLD, 2, 'USD')}}</td>
+                <td>{{assetName ? assetName : 'Asset'}} redeemable</td>
+                <td>{{getRounded(assetAmountNow * 2, 2, assetName)}}</td>
+            </tr>
+            <tr>
+                <td colspan="4">If you did not enter the pool, but rather <strong>HODL</strong></td>
+            </tr>
+            <tr>
+                <td>HODL value</td>
+                <td>{{getRounded(symHold, 2, 'USD')}}</td>
+                <td>Assets</td>
+                <td>{{getRounded(initRuneAmount, 2, 'Rune')}} + {{getRounded(initAssetAmount, 2, assetName)}}</td>
             </tr>
             <tr>
                 <td colspan="4">

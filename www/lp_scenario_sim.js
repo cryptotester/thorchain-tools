@@ -16,6 +16,7 @@ const app = new Vue({
     methods: {
         getRounded(number, rounding, suffix) {
             let suffixText = suffix !== undefined ? ` ${suffix}` : ''
+            if (suffix !== undefined && suffix.toUpperCase() === 'BTC') rounding = 4
             return !isNaN(number) ? `${number.toFixed(rounding)}${suffixText}` : ''
         },
         updateUrl() {
@@ -52,6 +53,12 @@ const app = new Vue({
         },
         initAssetAmount() {
             return this.initRuneValue / this.assetPriceAtEnter
+        },
+        initAssetAmountAsym() {
+            return this.initAssetAmount * 2
+        },
+        initRuneAmountAsym() {
+            return this.initRuneAmount * 2
         },
         initInvestmentValue() {
             return this.initRuneAmount * this.runePriceAtEnter + this.initAssetAmount * this.assetPriceAtEnter
